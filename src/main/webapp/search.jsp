@@ -27,7 +27,7 @@
 <section class="section">
 	<h2>백신예약조회</h2>
 	<form action="search_list.jsp" method="post" name="data" onsubmit="return checkValue()">
-		<table border = "1" style="margin-left: auto; margin-right: auto; border-collapse: collapse; width : 600px;">
+		<table border = "1" style="margin-left: auto; margin-right: auto; border-collapse: collapse; width : 600px; height : 100px;">
 			<tr>
 				<th>예약번호</th>
 				<td><input type="text" name="resvno"></input></td>

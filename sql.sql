@@ -30,6 +30,9 @@ insert into tbl_hosp_202108 values('H002', '나_병원', '031-1111-3333', '20');
 insert into tbl_hosp_202108 values('H003', '다_병원', '031-1111-4444', '30');
 insert into tbl_hosp_202108 values('H004', '라_병원', '031-1111-5555', '40');
 
+select * from tbl_hosp_202108;
+
+
 drop table tbl_vaccresv_202108;
 create table tbl_vaccresv_202108(
 	resvno number(8) primary key,
@@ -51,11 +54,18 @@ insert into tbl_vaccresv_202108 values(20210008, '780101-2000001', 'H001', '2021
 insert into tbl_vaccresv_202108 values(20210009, '790101-1000001', 'H001', '20210801', 1730, 'V003');
 insert into tbl_vaccresv_202108 values(20210010, '800101-2000001', 'H002', '20210801', 1830, 'V001');
 
-select resvno as 예약번호, name as 성명, 
-case when substr(ju.jumin, 8, 1)='1' then '남' else '여' end as 성별, hospname as 성별, hospname as 병원이름,
-substr(resvdate, 1, 4) || '년' || substr(resvdate, 5, 2) || '월' || substr(resvdate, 7, 2) || '일' as 예약날짜, 
-substr(resvtime, 1, 2) || ':' || substr(resvtime, 3, 2) as 예약시간, 
-case when vcode='V001' then 'A백신' when vcode='V002' then 'B백신' else 'C백신' end as 백신코드, 
-case when hospaddr='10' then '서울' when hospaddr='20' then '대전' when hospaddr='30' then '대구' else '광주' end as 병원지역 
-from tbl_jumin_202108 ju, tbl_hosp_202108 ho, tbl_vaccresv_202108 va 
-where ju.jumin = va.jumin and ho.hospcode = va.hospcode;
+select hospaddr as 병원지역, 
+	case when hospaddr='10' then '서울' when hospaddr='20' then '대전' 
+	when hospaddr='30' then '대구' else '광주' end as 병원지역명,
+	count(va.hospcode) as 병원코드
+from tbl_hosp_202108 ho, tbl_vaccresv_202108 va
+where ho.hospcode = va.hospcode(+)
+group by hospaddr
+order by hospaddr;
+
+select hospaddr as 병원지역, 
+	case when hospaddr='10' then '서울' when hospaddr='20' then '대전' 
+	when hospaddr='30' then '대구' else '광주' end as 병원지역명,
+	count(nvl(hospcode, 0)) as 병원코드
+from tbl_hosp_202108 left join tbl_vaccresv_202108 using(hospcode)
+group by hospaddr;
