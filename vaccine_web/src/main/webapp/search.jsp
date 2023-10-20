@@ -10,7 +10,7 @@
 	function checkValue() {
 		if(!document.data.resvno.value){
 			alert("예약번호가 입력되지 않았습니다.");
-			data1.resvno.focus();
+			data.resvno.focus();
 			return false;
 		}
 		return true;
